@@ -9,23 +9,20 @@ class App extends React.Component {
     const savedBusPasses = localStorage.getItem("busPasses");
     const savedUtilityAssistance = localStorage.getItem("utilityAssistance");
     const savedFoodBags = localStorage.getItem("foodBags");
-    const savedLoggedIn = localStorage.getItem("loggedIn");
     this.state = {
       entries: savedEntries ? JSON.parse(savedEntries) : [],
-      page: window.location.hash.replace("#", "") || "login",
+      page: "home",
       numBusPasses: savedBusPasses ? JSON.parse(savedBusPasses) : 0,
       numUtilities: savedUtilityAssistance ? JSON.parse(savedUtilityAssistance) : 0,
       numFoodBags: savedFoodBags ? JSON.parse(savedFoodBags) : 0,
       dashboardMessage: "",
-      userName: "Anna",
-      loggedIn: savedLoggedIn ? JSON.parse(savedLoggedIn) : false,
+      userName: "Ridglea",
       editingEntry: null
     };
-    this.logIn = this.logIn.bind(this);
-    this.logOut = this.logOut.bind(this);
     this.addEntry = this.addEntry.bind(this);
     this.editEntry = this.editEntry.bind(this);
     this.deleteEntry = this.deleteEntry.bind(this);
+    this.setEditingEntryNull = this.setEditingEntryNull.bind(this);
     this.startEditing = this.startEditing.bind(this);
     this.addFoodBag = this.addFoodBag.bind(this);
     this.sortEntries = this.sortEntries.bind(this); 
@@ -34,7 +31,7 @@ class App extends React.Component {
 
   componentDidMount() {
     if(!window.location.hash) {
-      window.location.hash = "#login";
+      window.location.hash = "#home";
     }
 
     window.addEventListener("hashchange", () => {
@@ -52,36 +49,15 @@ class App extends React.Component {
     else if(currentHour >= 17) {
       this.setState({ dashboardMessage: "Good evening, " + this.state.userName + "!"});
     }
-
-    
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("change");
   }
 
   redirect(toPage) {
     this.setState({
       page: toPage
     })
-  }
-
-  logIn() {
-    this.setState(
-      { loggedIn: true },
-      () => {
-        localStorage.setItem("loggedIn", JSON.stringify(this.state.loggedIn));
-      }
-    );
-  }
-
-  logOut() {
-    this.setState(
-      { loggedIn: false },
-      () => {
-        localStorage.setItem("loggedIn", JSON.stringify(this.state.loggedIn));
-      }
-    );
   }
 
   
@@ -129,12 +105,19 @@ class App extends React.Component {
       entries: prevState.entries.filter((entry) => entry.id !== deletedEntryId),
       numBusPasses: deletedEntry.service === "Bus Pass" ? prevState.numBusPasses - 1 : prevState.numBusPasses,
       numUtilities: deletedEntry.service === "Utility Assistance" ? prevState.numUtilities - 1 : prevState.numUtilities,
-      numFoodBags: deletedEntry.foodBag ? prevState.numFoodBags - 1 : prevState.numFoodBags
+      numFoodBags: deletedEntry.foodBag ? prevState.numFoodBags - 1 : prevState.numFoodBags,
+      editingEntry: null
     }), () => {
       localStorage.setItem("entries", JSON.stringify(this.state.entries));
       localStorage.setItem("busPasses", JSON.stringify(this.state.numBusPasses));
       localStorage.setItem("utilityAssistance", JSON.stringify(this.state.numUtilities));
       localStorage.setItem("foodBags", JSON.stringify(this.state.numFoodBags));
+    })
+  }
+
+  setEditingEntryNull() {
+    this.setState({
+      editingEntry: null
     })
   }
 
@@ -165,7 +148,8 @@ class App extends React.Component {
   }
 
   render() {
-    if(this.state.page === "home" && this.state.loggedIn) {
+    if(this.state.page === "home") {
+      console.log("home");
       return(<Homepage 
         dashboardMessage={this.state.dashboardMessage} 
         numBusPasses={this.state.numBusPasses} 
@@ -175,96 +159,22 @@ class App extends React.Component {
         entries={this.state.entries}
         editEntry={this.editEntry}
         startEditing={this.startEditing}
-        redirect={this.redirect}
-        logOut={this.logOut}/>);
+        redirect={this.redirect}/>);
     }
-    else if(this.state.page === "form" && this.state.loggedIn) {
+    else if(this.state.page === "form") {
+      console.log("form");
       return(<Form 
         addEntry={this.addEntry} 
         editEntry={this.editEntry}
         deleteEntry={this.deleteEntry} 
+        setEditingEntryNull={this.setEditingEntryNull}
         entries={this.state.entries} 
         entry={this.state.editingEntry} 
         redirect={this.redirect}/>);
     }
     else {
-      return(<LoginPage 
-        redirect={this.redirect}
-        logIn={this.logIn}/>)
+      return(<p>This page could not be found.</p>);
     }
-
-  }
-}
-
-class LoginPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-      wrongLogin: ""
-    }
-    this.fillUsername = this.fillUsername.bind(this);
-    this.fillPassword = this.fillPassword.bind(this);
-    this.verifyLogin = this.verifyLogin.bind(this);
-    this.clearLogin = this.clearLogin.bind(this);
-  }
-
-  verifyLogin() {
-    if(this.state.username === "ridgleaChristian" && this.state.password === "Ridglea6720!") {
-      this.props.logIn();
-      this.props.redirect("home");
-      this.clearLogin();
-    }
-    else {
-      this.setState({
-        wrongLogin: "Username or password is incorrect."
-      })
-    }
-  }
-
-  fillUsername(e) {
-    this.setState({
-      username: e.target.value
-    })
-  }
-
-  fillPassword(e) {
-    this.setState({
-      password: e.target.value
-    })
-  }
-
-  clearLogin() {
-    this.setState({
-      wrongLogin: "",
-      username: "",
-      password: ""
-    })
-  }
-
-  render() {
-    return(
-      <div id="login-background">
-        <div className="logo-title-div">
-          <img src="/rcc-logo.png" className="rcc-logo" />
-          <span className="site-title">Good Samaritan</span>
-        </div>
-        <div id="login-container">
-          <h3 id="login-title">Log In</h3>
-          <div className="login-input-div">
-            <label for="username" className="login-label">Username:</label>
-            <input id="username" className="login-input" value={this.state.username} onChange={this.fillUsername}/>
-          </div>
-          <div className="login-input-div">
-            <label for="username" className="login-label">Password:</label>
-            <input type="password" id="username" className="login-input" value={this.state.password} onChange={this.fillPassword}/>
-          </div>
-          <p id="wrong-login">{this.state.wrongLogin}</p>
-          <button id="login-button" onClick={this.verifyLogin}>Login</button>
-        </div>
-      </div>
-    )
   }
 }
 
@@ -429,7 +339,7 @@ class Homepage extends React.Component {
         setConfirmedSortMethod={this.setConfirmedSortMethod}
         clearRefine={this.clearRefine}/>) 
         : (<div></div>)}
-        <TopBar redirect={this.props.redirect} logOut={this.props.logOut}/>
+        <TopBar redirect={this.props.redirect}/>
         <h2 id="dashboard-message">{this.props.dashboardMessage}</h2>
         <div id="stats-div">
           <Stat name="Bus Passes" number={this.props.numBusPasses} nameId="bp-name" numberId="bp-number"/>
@@ -664,9 +574,6 @@ class TopBar extends React.Component {
           <img src="/rcc-logo.png" className="rcc-logo"/>
           <span className="site-title">Good Samaritan</span>
         </div>
-        <span id="logout-btn" onClick={() => {
-          this.props.redirect("login");
-          this.props.logOut()}}>Logout</span>
       </div>
     )
   }
@@ -759,7 +666,7 @@ class Form extends React.Component {
       notes: "",
       foodBag: "false",
       blankFieldWarning: "",
-      eligibleWarning: ""
+      eligibleWarning: "",
     })
   }
 
@@ -786,16 +693,20 @@ class Form extends React.Component {
     this.clearForm();
     this.props.redirect("home");
 
+    console.log(entry)
+
   }
 
   deleteEntry() {
     this.props.deleteEntry(this.state.id);
+    this.clearForm();
   }
 
   cancelEntry(e) {
     e.preventDefault();
     this.clearForm();
     this.props.redirect("home");
+    this.props.setEditingEntryNull();
   }
 
   showConfirmation() {
@@ -817,15 +728,15 @@ class Form extends React.Component {
         <form id="new-entry-form">
           <h2 id="form-header">{this.props.entry ? "Update Entry" : "Add New Entry"}</h2>
           <div id="date-form-div" className="form-field">
-            <label for="date-input" className="form-field-title">Date*</label>
+            <label htmlFor="date-input" className="form-field-title">Date*</label>
             <input name="date" type="date" id="date-input" className="form-input" onChange={this.handleChange} value={this.state.date} />
           </div>
           <div id="name-form-div" className="form-field">
-            <label for="name-input" className="form-field-title">Name*</label>
+            <label htmlFor="name-input" className="form-field-title">Name*</label>
             <input name="name" id="name-input" className="form-input" onChange={this.handleChange} value={this.state.name} />
           </div>
           <div id="service-form-div" className="form-field">
-            <label for="service-input" className="form-field-title">Service*</label> 
+            <label htmlFor="service-input" className="form-field-title">Service*</label> 
             <select name="service" id="service-input" className="form-input" onChange={this.handleChange} value={this.state.service}>
               <option value="Bus Pass">Bus Pass</option>
               <option value="Utility Assistance">Utility Assistance</option>
@@ -835,13 +746,13 @@ class Form extends React.Component {
             <p id="warning-message">{this.state.eligibleWarning}</p>
           </div>
           <div id="notes-form-div" className="form-field">
-            <label for="notes-input" className="form-field-title">Notes</label> 
+            <label htmlFor="notes-input" className="form-field-title">Notes</label> 
             <textarea name="notes" id="notes-input" className="form-input" placeholder="Eligibility, utility assistance amount, etc" onChange={this.handleChange} value={this.state.notes}></textarea>
           </div>
           <div id="wbf-bag-div" className="form-field">
             <input name="foodBag" id="wbf-checkbox" type="checkbox" onChange={this.handleChange} value={this.state.foodBag} checked={this.state.foodBag} />
-            <label name="foodBag" for="wbf-checkbox" class="custom-checkbox"></label>
-            <span class="form-field-title">  Include Will Be Fed bag</span>
+            <label name="foodBag" htmlFor="wbf-checkbox" className="custom-checkbox"></label>
+            <span className="form-field-title">  Include Will Be Fed bag</span>
           </div>
           <div id="form-btn-div">
             <button id="btn-submit" className="form-btn" type="submit" onClick={this.submitEntry}>{this.props.entry ? "Update" : "Submit"}</button>
