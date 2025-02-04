@@ -1,0 +1,492 @@
+:root {
+    --ridglea-red: #db2e2f;
+}
+
+#form-background {
+    z-index: 0;
+    height: 100%;
+}
+
+#new-entry-form {
+    margin: auto;
+    margin-top: 100px;
+    max-width: 430px;
+    box-shadow: 0 0 5px grey;
+    padding: 30px;
+    border-radius: 10px;
+}
+#form-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-field {
+    margin: 10px 0;
+    padding-left: 10px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.form-field-title {
+    width: 70px;
+    font-size: 18px;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+#service-input, #date-input {
+    cursor: pointer;
+}
+
+#notes-input {
+    height: 80px;
+}
+
+#form-btn-div {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.form-btn {
+    width: 170px;
+    height: 40px;
+    border: none;
+    background-color: darkgray;
+    color: white;
+    font-weight: bold;
+    border: 1px solid white;
+}
+
+#btn-submit, #btn-cancel {
+    border-radius: 5px;
+}
+
+.form-input {
+    width: 95%;
+    height: 35px;
+    border-radius: 5px;
+    padding-left: 10px;
+    border: none;
+    background-color: #eeeeee;
+}
+
+#warning-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#blank-field-warning {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
+
+#wbf-checkbox {
+    display: none;
+}
+
+.custom-checkbox {
+    background-color: #e0e0e0;
+    width: 25px;
+    height: 25px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center; 
+    justify-content: center; 
+    position: relative;
+    top: -4px;
+    cursor: pointer;
+    vertical-align: middle; 
+    margin-right: 5px;
+}
+
+.custom-checkbox:hover {
+    background-color: #cccccc;
+}
+
+.custom-checkbox::after {
+    content: "✓";
+    font-size: 14px; 
+    color: black; 
+    display: none; 
+    font-weight: bold;
+}
+
+#wbf-checkbox:checked + .custom-checkbox::after {
+    display: block; 
+}
+
+#delete-entry {
+    width: fit-content;
+    margin: auto;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#confirmation-background {
+    background-color: rgb(0,0,0,0.4);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    z-index: 2;
+}
+
+#confirmation-container {
+    background: white;
+    max-width: 350px;
+    height: 200px;
+    margin: auto;
+    margin-top: 30%; 
+    box-shadow: 0 0 5px black;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+#confirmation-prompt {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.confirmation-btn {
+    width: 48%;
+    height: 40px;
+    border: none;
+    margin-left: 1%;
+    margin-right: 1%;
+    border-radius: 5px; 
+    background-color: lightgray;
+}
+
+#confirmation-buttons {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#stats-div {
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    width: 80%;
+    max-width: 700px;
+    margin-top: -20px;
+}
+
+.stat-div {
+    text-align: center;
+    width: 33%;
+}
+
+.stat-number {
+    font-size: 100px;
+    margin-bottom: -20px;
+}
+
+.stat-name {
+    font-size: 20px;
+}
+
+#bar {
+    background-color: var(--ridglea-red);
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    box-shadow : 0 0 10px black;
+}
+
+.rcc-logo {
+    height: 100px;
+}
+
+.site-title {
+    color: white;
+    font-size: 30px;
+    position: relative;
+    top: -5px;
+}
+
+.logo-title-div {
+    display: flex;
+    align-items: flex-end;
+}
+
+#logout-btn {
+    color: white;
+    font-size: 20px;;
+    position: relative;
+    top: -10px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+#homepage-btn-div {
+    text-align: center;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    width: 80%;
+    max-width: 700px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.homepage-btn {
+    width: 49%;
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    background-color: lightgray;
+    font-weight: bold;
+    font-size: 23px;
+}
+
+#dashboard-message {
+    height: 40px;
+    text-align: center;
+    margin-top: 50px;
+}
+
+#search-div {
+    text-align: center;
+    width: 80%;
+    margin: auto;
+    max-width: 700px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#search-bar {
+    height: 40px;
+    width: 80%;
+    border-radius: 5px;
+    background-color: #eeeeee;
+    border: none;
+    padding: 0 10px;
+}
+
+#refine-btn {
+    height: 40px;
+    width: 19%;
+    border: none;
+    border-radius: 5px;
+}
+
+#refine-background {
+    position: absolute;
+    z-index: 2;
+    background-color: rgba(0,0,0,0.3);
+    height: 100%;
+    width: 100%;
+}
+
+#refine-panel {
+    max-width: 450px;;
+    height: 100%;
+    box-shadow: 0 0 30px black;
+    background-color: white;
+}
+
+#sort-filter-div {
+    width: 80%;
+    margin: auto;
+    border: 1px solid white;
+}
+
+#sort-title {
+    margin-top: 30px;
+}
+
+#sort-select {
+    border: none;
+    background-color: #dddddd;
+    height: 30px;
+    border-radius: 5px;
+    width: 50%;
+    padding-left: 5px;
+}
+
+#filter-title {
+    margin-top: 30px;
+}
+
+.filter-btn {
+    margin: 5px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    background-color: #dddddd;
+}
+
+#apply-cancel-btns {
+    margin: 50px;
+    margin-bottom: 15px;;
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+#apply-filter-btn, #cancel-filter-btn {
+    border: none;
+    background-color: #dddddd;
+    width: 48%;
+    height: 40px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+#clear-criteria-btn {
+    border: none;
+    display: block;
+    margin: auto;
+    background-color: #dddddd;
+    font-weight: bold;
+    border-radius: 5px;
+    height: 40px;
+    width: 78%;
+}
+
+.month-btn, .service-btn, .foodbag-btn {
+    border: none;
+    background-color: #dddddd;
+    margin: 5px;
+    height: 30px;
+    border-radius: 5px;
+    
+}
+
+.month-btn {
+    width: 60px;
+}
+
+.foodbag-btn {
+    padding: 0 15px;
+}
+
+.service-btn {
+    padding: 0 10px;
+}
+
+.selected-filter {
+    background-color: var(--ridglea-red);
+    color: white;
+}
+
+#month-p, #service-p, #foodbag-p {
+    margin-top: 30px;
+    font-weight: bold;
+}
+
+#no-entries {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.entry-div {
+    padding: 5px 15px;
+    margin: auto;
+    border: 1px solid lightgray;
+}
+
+.entry-list {
+    border-radius: 5px;
+    border: 1px solid lightgray;
+    width: 80%;
+    max-width: 700px;
+    height: 350px;
+    margin: auto;
+    box-shadow: 0 0 5px lightgray;
+    overflow-y: auto;
+}
+
+#row-1 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #dddddd;
+    font-weight: bold;
+    font-size: 20px;
+    padding-left: 15px;
+    height: 35px;
+}
+
+#login-background {
+    background-color: var(--ridglea-red);
+    height: 100%;
+}
+
+#login-container {
+    background-color: white;
+    width: 50%;
+    max-width: 500px;
+    height: fit-content;
+    margin: auto;
+    margin-top: 100px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #777777;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+#login-title {
+    width: fit-content;
+    margin: auto;
+
+}
+
+.login-input-div {
+    text-align: center;
+    margin: auto;
+    margin-top: 30px;
+    width: 75%;
+}
+
+.login-label {
+    text-align: right;
+    width: 30%;
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.login-input {
+    width: 65%;
+    height: 35px;
+    border-radius: 5px;
+    background-color: #e1e1e1;
+    border: none;
+    padding-left: 5px;
+}
+
+#login-button {
+    border: none;
+    display: block;
+    background-color: darkgrey;
+    color: white;
+    font-weight: bold;
+    height: 40px;
+    width: 75%;
+    margin: auto;
+    margin-top: 30px;
+    border-radius: 5px;
+}
+
+#wrong-login {
+    color: red;
+    font-weight: bold;
+    width: fit-content;
+    margin: auto;
+    margin-top: 10px;
+}
