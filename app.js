@@ -135,7 +135,7 @@ class App extends React.Component {
     formData.append("notes", entryState.notes);
     //console.log(entryState.foodBag);
 
-    fetch("http://rccgoodsamaritan.atwebpages.com/insertService.php", {
+    fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=insertService.php", {
       method: "POST", 
       body: formData
     })
@@ -152,7 +152,7 @@ class App extends React.Component {
       if(entryState.foodBag) {
         this.addFoodBag();
       }
-      return fetch("http://rccgoodsamaritan.atwebpages.com/getServices.php");
+      return fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getServices.php");
     })
     .then(response => response.json())
     .then(updatedEntries => {
@@ -177,7 +177,7 @@ class App extends React.Component {
     formData.append("foodBag", updatedEntry.foodBag);
     formData.append("notes", updatedEntry.notes);
 
-    fetch("http://rccgoodsamaritan.atwebpages.com/editService.php", {
+    fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=editService.php", {
       method: "POST",
       body: formData
     })
@@ -197,7 +197,7 @@ class App extends React.Component {
             console.log("subtracting food bag");
             this.subtractFoodBag();
           }
-          return fetch("http://rccgoodsamaritan.atwebpages.com/getServices.php");
+          return fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getServices.php");
         } 
         else {
           throw new Error("Failed to edit entry");
@@ -221,7 +221,7 @@ class App extends React.Component {
   deleteEntry(deletedEntryId) {
     const entry = this.state.entries.find((entry) => entry.id === deletedEntryId);
 
-    fetch("http://rccgoodsamaritan.atwebpages.com/deleteService.php", {
+    fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=deleteService.php", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({id: deletedEntryId})
@@ -237,7 +237,7 @@ class App extends React.Component {
           if(entry.foodBag === "1") {
             this.subtractFoodBag();
           }
-          return fetch("http://rccgoodsamaritan.atwebpages.com/getServices.php");
+          return fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getServices.php");
         } else {
           throw new Error("Failed to delete entry");
         }
@@ -255,7 +255,7 @@ class App extends React.Component {
   }
 
   fetchNumFoodBags() {
-    return fetch("http://rccgoodsamaritan.atwebpages.com/getFoodBags.php")
+    return fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getFoodBags.php")
       .then(response => {
         if(!response.ok) {
           throw new Error("Network response was not ok");
@@ -282,7 +282,7 @@ class App extends React.Component {
     const formData = new FormData();
     formData.append("numFoodBags", parseInt(this.state.numFoodBags) + 1);
 
-    fetch("http://rccgoodsamaritan.atwebpages.com/setFoodBags.php", {
+    fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=setFoodBags.php", {
       method: "POST", 
       body: formData
     })
@@ -297,7 +297,7 @@ class App extends React.Component {
         throw new Error(data.error || "Failed to add entry");
       }
 
-      return fetch("http://rccgoodsamaritan.atwebpages.com/getFoodBags.php");
+      return fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getFoodBags.php");
     })
     .then(response => response.json())
     .then(updatedEntries => {
@@ -313,7 +313,7 @@ class App extends React.Component {
     const formData = new FormData();
     formData.append("numFoodBags", parseInt(this.state.numFoodBags) - 1);
 
-    fetch("http://rccgoodsamaritan.atwebpages.com/setFoodBags.php", {
+    fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=setFoodBags.php", {
       method: "POST", 
       body: formData
     })
@@ -328,7 +328,7 @@ class App extends React.Component {
         throw new Error(data.error || "Failed to add entry");
       }
 
-      return fetch("http://rccgoodsamaritan.atwebpages.com/getFoodBags.php");
+      return fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getFoodBags.php");
     })
     .then(response => response.json())
     .then(updatedEntries => {
@@ -422,6 +422,10 @@ class LoginPage extends React.Component {
     this.clearLogin = this.clearLogin.bind(this);
   }
 
+  componentDidMount() {
+    window.scroll(0,0);
+  }
+
   verifyLogin() {
     const {username, password} = this.state;
     if(!username || !password) {
@@ -512,11 +516,11 @@ class LoginPage extends React.Component {
         <div id="login-container">
           <h3 id="login-title">Log In</h3>
           <div className="login-input-div">
-            <label for="username" className="login-label">Email:</label>
+            <label htmlFor="username" className="login-label">Email:</label>
             <input id="username" className="login-input" value={this.state.username} onChange={this.fillUsername}/>
           </div>
           <div className="login-input-div">
-            <label for="username" className="login-label">Password:</label>
+            <label htmlFor="username" className="login-label">Password:</label>
             <input type="password" id="password" className="login-input" value={this.state.password} onChange={this.fillPassword}/>
           </div>
           <button id="login-button" onClick={this.verifyLogin}>Login</button>
@@ -604,6 +608,7 @@ class Homepage extends React.Component {
     this.clearRefine = this.clearRefine.bind(this);
   }
   componentDidMount() {
+    window.scroll(0,0);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -712,7 +717,7 @@ class Homepage extends React.Component {
         </div>
         <EntryList entries={this.state.filters.length === 0 ? this.props.allEntries : this.state.returnedEntries} sort={this.state.confirmedSort} onEdit={(entry) => this.props.startEditing(entry)} />
         {/* <button id="upload-btn">Upload Entries</button> */}
-        {/* <label for="choose-file" id="choose-file-label">Import Entries</label>
+        {/* <label htmlFor="choose-file" id="choose-file-label">Import Entries</label>
         <input type="file" id="choose-file"/> */}
       </div>
     )
@@ -965,7 +970,7 @@ class Form extends React.Component {
   }
 
   componentDidMount() {
-    //console.log(this.state.foodBag);
+      window.scroll(0,0);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -1088,15 +1093,15 @@ class Form extends React.Component {
         <form id="new-entry-form">
           <h2 id="form-header">{this.props.entry ? "Update Entry" : "Add New Entry"}</h2>
           <div id="date-form-div" className="form-field">
-            <label for="date-input" className="form-field-title">Date*</label>
+            <label htmlFor="date-input" className="form-field-title">Date*</label>
             <input name="date" type="date" id="date-input" className="form-input" onChange={this.handleChange} value={this.state.date} />
           </div>
           <div id="name-form-div" className="form-field">
-            <label for="name-input" className="form-field-title">Name*</label>
+            <label htmlFor="name-input" className="form-field-title">Name*</label>
             <input name="name" id="name-input" className="form-input" onChange={this.handleChange} value={this.state.name} />
           </div>
           <div id="service-form-div" className="form-field">
-            <label for="service-input" className="form-field-title">Service*</label> 
+            <label htmlFor="service-input" className="form-field-title">Service*</label> 
             <select name="service" id="service-input" className="form-input" onChange={this.handleChange} value={this.state.service}>
               <option value="Bus Pass">Bus Pass</option>
               <option value="Utility">Utility</option>
@@ -1106,12 +1111,12 @@ class Form extends React.Component {
             <p id="warning-message">{this.state.eligibleWarning}</p>
           </div>
           <div id="notes-form-div" className="form-field">
-            <label for="notes-input" className="form-field-title">Notes</label> 
+            <label htmlFor="notes-input" className="form-field-title">Notes</label> 
             <textarea name="notes" id="notes-input" className="form-input" placeholder="Eligibility, utility assistance amount, etc" onChange={this.handleChange} value={this.state.notes}></textarea>
           </div>
           <div id="wbf-bag-div" className="form-field">
             <input name="foodBag" id="wbf-checkbox" type="checkbox" onChange={this.handleChange} value={this.state.foodBag} checked={this.state.foodBag} />
-            <label name="foodBag" for="wbf-checkbox" class="custom-checkbox"></label>
+            <label name="foodBag" htmlFor="wbf-checkbox" class="custom-checkbox"></label>
             <span class="form-field-title">  Include Will Be Fed bag</span>
           </div>
           <div id="form-btn-div">
