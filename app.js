@@ -98,7 +98,7 @@ class App extends React.Component {
   }
 
   fetchServices() {
-    return fetch("http://rccgoodsamaritan.atwebpages.com/getServices.php")
+    return fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getServices.php")
       .then(response => {
         if(!response.ok) {
           throw new Error("Network response was not ok");
@@ -135,7 +135,7 @@ class App extends React.Component {
     formData.append("notes", entryState.notes);
     //console.log(entryState.foodBag);
 
-    fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=insertService.php", {
+    fetch("http://rccgoodsamaritan.atwebpages.com/insertService.php", {
       method: "POST", 
       body: formData
     })
@@ -152,7 +152,7 @@ class App extends React.Component {
       if(entryState.foodBag) {
         this.addFoodBag();
       }
-      return fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getServices.php");
+      return fetch("http://rccgoodsamaritan.atwebpages.com/getServices.php");
     })
     .then(response => response.json())
     .then(updatedEntries => {
@@ -255,7 +255,7 @@ class App extends React.Component {
   }
 
   fetchNumFoodBags() {
-    return fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getFoodBags.php")
+    return fetch("http://rccgoodsamaritan.atwebpages.com/getFoodBags.php")
       .then(response => {
         if(!response.ok) {
           throw new Error("Network response was not ok");
@@ -434,7 +434,7 @@ class LoginPage extends React.Component {
       })
     }
 
-    fetch("http://rccgoodsamaritan.atwebpages.com/verifyUser.php", {
+    fetch("http://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=verifyUser.php", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({email: username, password: password})
