@@ -98,7 +98,7 @@ class App extends React.Component {
   }
 
   fetchServices() {
-    return fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getServices.php")
+    return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getServices.php")
       .then(response => {
         if(!response.ok) {
           throw new Error("Network response was not ok");
@@ -135,7 +135,7 @@ class App extends React.Component {
     formData.append("notes", entryState.notes);
     //console.log(entryState.foodBag);
 
-    fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=insertService.php", {
+    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=insertService.php", {
       method: "POST", 
       body: formData
     })
@@ -152,7 +152,7 @@ class App extends React.Component {
       if(entryState.foodBag) {
         this.addFoodBag();
       }
-      return fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getServices.php");
+      return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getServices.php");
     })
     .then(response => response.json())
     .then(updatedEntries => {
@@ -177,7 +177,7 @@ class App extends React.Component {
     formData.append("foodBag", updatedEntry.foodBag);
     formData.append("notes", updatedEntry.notes);
 
-    fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=editService.php", {
+    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=editService.php", {
       method: "POST",
       body: formData
     })
@@ -197,7 +197,7 @@ class App extends React.Component {
             console.log("subtracting food bag");
             this.subtractFoodBag();
           }
-          return fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getServices.php");
+          return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getServices.php");
         } 
         else {
           throw new Error("Failed to edit entry");
@@ -221,7 +221,7 @@ class App extends React.Component {
   deleteEntry(deletedEntryId) {
     const entry = this.state.entries.find((entry) => entry.id === deletedEntryId);
 
-    fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=deleteService.php", {
+    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=deleteService.php", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({id: deletedEntryId})
@@ -237,7 +237,7 @@ class App extends React.Component {
           if(entry.foodBag === "1") {
             this.subtractFoodBag();
           }
-          return fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getServices.php");
+          return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getServices.php");
         } else {
           throw new Error("Failed to delete entry");
         }
@@ -255,7 +255,7 @@ class App extends React.Component {
   }
 
   fetchNumFoodBags() {
-    return fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getFoodBags.php")
+    return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getFoodBags.php")
       .then(response => {
         if(!response.ok) {
           throw new Error("Network response was not ok");
@@ -282,7 +282,7 @@ class App extends React.Component {
     const formData = new FormData();
     formData.append("numFoodBags", parseInt(this.state.numFoodBags) + 1);
 
-    fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=setFoodBags.php", {
+    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=setFoodBags.php", {
       method: "POST", 
       body: formData
     })
@@ -297,7 +297,7 @@ class App extends React.Component {
         throw new Error(data.error || "Failed to add entry");
       }
 
-      return fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getFoodBags.php");
+      return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getFoodBags.php");
     })
     .then(response => response.json())
     .then(updatedEntries => {
@@ -313,7 +313,7 @@ class App extends React.Component {
     const formData = new FormData();
     formData.append("numFoodBags", parseInt(this.state.numFoodBags) - 1);
 
-    fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=setFoodBags.php", {
+    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=setFoodBags.php", {
       method: "POST", 
       body: formData
     })
@@ -328,7 +328,7 @@ class App extends React.Component {
         throw new Error(data.error || "Failed to add entry");
       }
 
-      return fetch("https://rccgoodsamaritan.atwebpages.com/apiProxy.php?endpoint=getFoodBags.php");
+      return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getFoodBags.php");
     })
     .then(response => response.json())
     .then(updatedEntries => {
@@ -434,7 +434,7 @@ class LoginPage extends React.Component {
       })
     }
 
-    fetch("https://rccgoodsamaritan.atwebpages.com/verifyUser.php", {
+    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=verifyUser.php", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({email: username, password: password})
