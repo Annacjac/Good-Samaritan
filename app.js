@@ -98,7 +98,7 @@ class App extends React.Component {
   }
 
   fetchServices() {
-    return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getServices.php")
+    return fetch("https://rccgoodsamaritan.org/getServices.php")
       .then(response => {
         if(!response.ok) {
           throw new Error("Network response was not ok");
@@ -135,7 +135,7 @@ class App extends React.Component {
     formData.append("notes", entryState.notes);
     //console.log(entryState.foodBag);
 
-    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=insertService.php", {
+    fetch("https://rccgoodsamaritan.org/insertService.php", {
       method: "POST", 
       body: formData
     })
@@ -152,7 +152,7 @@ class App extends React.Component {
       if(entryState.foodBag) {
         this.addFoodBag();
       }
-      return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getServices.php");
+      return fetch("https://rccgoodsamaritan.org/getServices.php");
     })
     .then(response => response.json())
     .then(updatedEntries => {
@@ -177,7 +177,7 @@ class App extends React.Component {
     formData.append("foodBag", updatedEntry.foodBag);
     formData.append("notes", updatedEntry.notes);
 
-    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=editService.php", {
+    fetch("https://rccgoodsamaritan.org/editService.php", {
       method: "POST",
       body: formData
     })
@@ -197,7 +197,7 @@ class App extends React.Component {
             console.log("subtracting food bag");
             this.subtractFoodBag();
           }
-          return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getServices.php");
+          return fetch("https://rccgoodsamaritan.org/getServices.php");
         } 
         else {
           throw new Error("Failed to edit entry");
@@ -221,7 +221,7 @@ class App extends React.Component {
   deleteEntry(deletedEntryId) {
     const entry = this.state.entries.find((entry) => entry.id === deletedEntryId);
 
-    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=deleteService.php", {
+    fetch("https://rccgoodsamaritan.org/deleteService.php", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({id: deletedEntryId})
@@ -237,7 +237,7 @@ class App extends React.Component {
           if(entry.foodBag === "1") {
             this.subtractFoodBag();
           }
-          return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getServices.php");
+          return fetch("https://rccgoodsamaritan.org/getServices.php");
         } else {
           throw new Error("Failed to delete entry");
         }
@@ -255,7 +255,7 @@ class App extends React.Component {
   }
 
   fetchNumFoodBags() {
-    return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getFoodBags.php")
+    return fetch("https://rccgoodsamaritan.org/getFoodBags.php")
       .then(response => {
         if(!response.ok) {
           throw new Error("Network response was not ok");
@@ -282,7 +282,7 @@ class App extends React.Component {
     const formData = new FormData();
     formData.append("numFoodBags", parseInt(this.state.numFoodBags) + 1);
 
-    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=setFoodBags.php", {
+    fetch("https://rccgoodsamaritan.org/setFoodBags.php", {
       method: "POST", 
       body: formData
     })
@@ -294,10 +294,10 @@ class App extends React.Component {
     })
     .then(data => {
       if(!data.success) {
-        throw new Error(data.error || "Failed to add entry");
+        throw new Error(data.error || "Failed to add foodbag");
       }
 
-      return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getFoodBags.php");
+      return fetch("https://rccgoodsamaritan.org/getFoodBags.php");
     })
     .then(response => response.json())
     .then(updatedEntries => {
@@ -313,7 +313,7 @@ class App extends React.Component {
     const formData = new FormData();
     formData.append("numFoodBags", parseInt(this.state.numFoodBags) - 1);
 
-    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=setFoodBags.php", {
+    fetch("https://rccgoodsamaritan.org/setFoodBags.php", {
       method: "POST", 
       body: formData
     })
@@ -325,10 +325,10 @@ class App extends React.Component {
     })
     .then(data => {
       if(!data.success) {
-        throw new Error(data.error || "Failed to add entry");
+        throw new Error(data.error || "Failed to subtract food bag");
       }
 
-      return fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=getFoodBags.php");
+      return fetch("https://rccgoodsamaritan.org/getFoodBags.php");
     })
     .then(response => response.json())
     .then(updatedEntries => {
@@ -434,7 +434,7 @@ class LoginPage extends React.Component {
       })
     }
 
-    fetch("https://api.rccgoodsamaritan.org/apiProxy.php?endpoint=verifyUser.php", {
+    fetch("https://rccgoodsamaritan.org/verifyUser.php", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({email: username, password: password})
@@ -550,11 +550,11 @@ const EntryList = ({entries, sort, onEdit}) => {
   //console.log(entries);
   return (
     <div className="entry-list">
-      {Object.keys(groupedEntries).length > 0 ? 
-        (Object.keys(groupedEntries).map((group, index) => (
+      {groupedEntries.size > 0 ? 
+        ([...groupedEntries.keys()].map((group, index) => (
           <div key={index} className="entry-group">
             <div className="sticky-header">{group}</div>
-            {groupedEntries[group].map((entry, i) => (
+            {groupedEntries.get(group).map((entry, i) => (
               <Entry key={i} entry={entry} onEdit={onEdit}/>
             ))}
           </div>
@@ -567,7 +567,24 @@ const EntryList = ({entries, sort, onEdit}) => {
 }
 
 const groupEntries = (entries, sortMethod) => {
-  return entries.reduce((acc, entry) => {
+  const sortedEntries = [...entries];
+
+  if(sortMethod === "newest-to-oldest") {
+    sortedEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
+  else if(sortMethod === "oldest-to-newest") {
+    sortedEntries.sort((a, b) => new Date(a.date) - new Date(b.date));
+  }
+  else if(sortMethod === "name-az") {
+    sortedEntries.sort((a, b) => a.name.localeCompare(b.name));
+  }
+  else if(sortMethod === "name-za") {
+    sortedEntries.sort((a, b) => b.name.localeCompare(a.name));
+  }
+
+  const groupedEntries = new Map();
+
+  sortedEntries.forEach((entry) => {
     let groupKey;
 
     if(sortMethod === "newest-to-oldest" || sortMethod === "oldest-to-newest") {
@@ -576,15 +593,16 @@ const groupEntries = (entries, sortMethod) => {
     else if(sortMethod === "name-az" || sortMethod === "name-za"){
       groupKey = entry.name[0].toUpperCase();
     }
-    
-    if(!acc[groupKey]) {
-      acc[groupKey] = [];
+
+    if(!groupedEntries.has(groupKey)) {
+      groupedEntries.set(groupKey, []);
     }
 
-    acc[groupKey].push(entry);
+    groupedEntries.get(groupKey).push(entry);
+  });
 
-    return acc;
-  }, {});
+  return groupedEntries;
+  
 }
 
 class Homepage extends React.Component {
@@ -816,7 +834,7 @@ class RefineResults extends React.Component {
 
   sortResults(entries) {
     const sortMethod = this.props.sort;
-    let results = [];
+    let results = [...entries];
     if(sortMethod === "newest-to-oldest") {
       results = entries.sort((a, b) => new Date(b.date) - new Date(a.date));
     }
@@ -1116,8 +1134,8 @@ class Form extends React.Component {
           </div>
           <div id="wbf-bag-div" className="form-field">
             <input name="foodBag" id="wbf-checkbox" type="checkbox" onChange={this.handleChange} value={this.state.foodBag} checked={this.state.foodBag} />
-            <label name="foodBag" htmlFor="wbf-checkbox" class="custom-checkbox"></label>
-            <span class="form-field-title">  Include Will Be Fed bag</span>
+            <label name="foodBag" htmlFor="wbf-checkbox" className="custom-checkbox"></label>
+            <span className="form-field-title">  Include Will Be Fed bag</span>
           </div>
           <div id="form-btn-div">
             <button id="btn-submit" className="form-btn" type="submit" onClick={this.submitEntry}>{this.props.entry ? "Update" : "Submit"}</button>
